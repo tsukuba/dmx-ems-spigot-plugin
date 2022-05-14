@@ -45,15 +45,15 @@ jobs:
           mkdir release
           cp target/*.jar release
           zip -r release.zip release/
-    - name: Generate archive name
-      id: archive_name
-      run: echo ::set-output name=name::uboot-${{ matrix.model }}-${GITHUB_REF/refs\/*s\//}
-    - name: Upload release.zip
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ needs.create_release.outputs.upload_url }}
-        asset_path: release.zip
-        asset_name: ems-plugin.zip
-        asset_content_type: application/zip
+      - name: Generate archive name
+        id: archive_name
+        run: echo ::set-output name=name::uboot-${{ matrix.model }}-${GITHUB_REF/refs\/*s\//}
+      - name: Upload release.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: release.zip
+          asset_name: ems-plugin.zip
+          asset_content_type: application/zip
