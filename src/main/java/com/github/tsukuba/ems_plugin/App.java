@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -34,7 +35,7 @@ public class App extends JavaPlugin implements Listener {
         Player p = event.getPlayer();
         String setting_json="{\"server\":\""+eventserver_url+"\",\"id\":"+p.getUniqueId().toString()+"\"}";
         p.sendMessage(frontserver_url+"?setting="+
-            String(
+            new String(
                 Base64
                 .getUrlEncoder()
                 .withoutPadding()
@@ -58,7 +59,7 @@ public class App extends JavaPlugin implements Listener {
                                 ((Player)damaged).getPlayerListName(),
                                 damaged.getUniqueId().toString(),
                                 event.getDamage()));
-            event_sender(damaged.getUniqueId().toString(),event.getDamage());
+            event_sender(damaged.getUniqueId().toString(),(int)event.getDamage());
         }
     }
 
