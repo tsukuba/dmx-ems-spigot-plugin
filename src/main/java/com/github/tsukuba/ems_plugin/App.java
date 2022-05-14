@@ -46,7 +46,7 @@ public class App extends JavaPlugin implements Listener {
             )+ "に接続し感電マシーンの設定を行ってください");
     }
 
-    private event_sender(String player_id,int modifier){
+    private void event_sender(String player_id,int modifier){
         String setting_json="{\"who\":\""+player_id+"\",\"modifier\":"+Integer.toString(modifier)+"\"}";
     }
     
