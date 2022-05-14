@@ -42,9 +42,9 @@ jobs:
       - name: Setup releases
         id: release_name
         run: |
-        mkdir release
-        cp target/*.jar release
-        zip -r release.zip release/
+          mkdir release
+          cp target/*.jar release
+          zip -r release.zip release/
     - name: Generate archive name
       id: archive_name
       run: echo ::set-output name=name::uboot-${{ matrix.model }}-${GITHUB_REF/refs\/*s\//}
