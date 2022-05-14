@@ -1,0 +1,5 @@
+main: com.github.tsukuba.ems_plugin.App
+name: ems-plugin
+version: "0.1"
+api: 1.15.2
+api-version: 1.15
