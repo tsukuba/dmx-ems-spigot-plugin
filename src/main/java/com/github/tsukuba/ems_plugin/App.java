@@ -27,7 +27,7 @@ public class App extends JavaPlugin implements Listener {
     public void onEnable() {
         getLogger().info("Spark, spark, spark!");
         getServer().getPluginManager().registerEvents(this, this);
-        saveDefaultConfig();
+        getConfig().options().copyDefaults(true);
         FileConfiguration config = getConfig();
         eventserver_url = config.getString("event_server");
         frontserver_url = config.getString("front_server");
