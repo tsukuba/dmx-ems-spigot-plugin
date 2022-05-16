@@ -11,14 +11,17 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
 
 public class App extends JavaPlugin implements Listener {
     private String eventserver_url;
     private String frontserver_url;
+    private String eventlistenserver_url;
 
     @Override
     public void onEnable() {
@@ -26,40 +29,54 @@ public class App extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
         saveDefaultConfig();
         FileConfiguration config = getConfig();
-        eventserver_url = config.getString("event_Server");
-        frontserver_url = config.getString("front_Server");
+        eventserver_url = config.getString("event_server");
+        frontserver_url = config.getString("front_server");
+        eventlistenserver_url = config.getString("event_listen_server");
     }
 
     @EventHandler
-    public void PlayerJoinEvent(PlayerJoinEvent event){
+    public void PlayerJoinEvent(PlayerJoinEvent event) {
         Player p = event.getPlayer();
-        String setting_json="{\"server\":\""+eventserver_url+"\",\"id\":"+p.getUniqueId().toString()+"\"}";
-        p.sendMessage(frontserver_url+"?setting="+
-            new String(
-                Base64
-                .getUrlEncoder()
-                .withoutPadding()
-                .encode(
-                    setting_json
-                    .getBytes(StandardCharsets.US_ASCII)
-                ),
-                StandardCharsets.US_ASCII
-            )+ "に接続し感電マシーンの設定を行ってください");
+        String setting_json = "{\"server\":\"" + eventserver_url + "\",\"id\":" + p.getUniqueId().toString() + "\"}";
+        p.sendMessage(frontserver_url + "?setting=" +
+                new String(
+                        Base64
+                                .getUrlEncoder()
+                                .withoutPadding()
+                                .encode(
+                                        setting_json
+                                                .getBytes(StandardCharsets.US_ASCII)),
+                        StandardCharsets.US_ASCII)
+                + "に接続し感電マシーンの設定を行ってください");
     }
 
-    private void event_sender(String player_id,int modifier){
-        String setting_json="{\"who\":\""+player_id+"\",\"modifier\":"+Integer.toString(modifier)+"\"}";
+    private void event_sender(String player_id, int modifier) {
+        String setting_json = "{\"who\":\"" + player_id + "\",\"modifier\":" + Integer.toString(modifier) + "\"}";
+        HttpClient client = HttpClient.newBuilder().build();
+
+        HttpRequest req = HttpRequest.newBuilder()
+                .uri(URI.create(
+                        eventlistenserver_url))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(setting_json))
+                .build();
+        try {
+            client.send(req,
+                    HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+        }
+
     }
-    
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity damaged = event.getEntity();
-        if(damaged instanceof Player){
+        if (damaged instanceof Player) {
             getLogger().info(String.format("Player:%s(id:%s)/damage/damage amount:%e",
-                                ((Player)damaged).getPlayerListName(),
-                                damaged.getUniqueId().toString(),
-                                event.getDamage()));
-            event_sender(damaged.getUniqueId().toString(),(int)event.getDamage());
+                    ((Player) damaged).getPlayerListName(),
+                    damaged.getUniqueId().toString(),
+                    event.getDamage()));
+            event_sender(damaged.getUniqueId().toString(), (int) event.getDamage());
         }
     }
 
@@ -68,11 +85,11 @@ public class App extends JavaPlugin implements Listener {
         Entity damaged = event.getEntity();
         if (damaged instanceof Player) {
             getLogger().info(String.format("Player:%s(id:%s)/death/dropped exp:%d/dropped items:%s",
-                                ((Player)damaged).getPlayerListName(),
-                                damaged.getUniqueId().toString(),
-                                event.getDroppedExp(),
-                                event.getDrops().toString()));
-            event_sender(damaged.getUniqueId().toString(),10);
+                    ((Player) damaged).getPlayerListName(),
+                    damaged.getUniqueId().toString(),
+                    event.getDroppedExp(),
+                    event.getDrops().toString()));
+            event_sender(damaged.getUniqueId().toString(), 10);
         }
     }
 }
