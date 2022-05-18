@@ -1,6 +1,12 @@
 package com.github.tsukuba.ems_plugin;
 
 import org.bukkit.plugin.java.JavaPlugin;
+
+import org.bukkit.configuration.file.FileConfiguration;
+
+import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -38,16 +43,23 @@ public class App extends JavaPlugin implements Listener {
     public void PlayerJoinEvent(PlayerJoinEvent event) {
         Player p = event.getPlayer();
         String setting_json = "{\"server\":\"" + eventserver_url + "\",\"id\":" + p.getUniqueId().toString() + "\"}";
-        p.sendMessage(frontserver_url + "?setting=" +
-                new String(
-                        Base64
-                                .getUrlEncoder()
-                                .withoutPadding()
-                                .encode(
-                                        setting_json
-                                                .getBytes(StandardCharsets.US_ASCII)),
-                        StandardCharsets.US_ASCII)
-                + "に接続し感電マシーンの設定を行ってください");
+        TextComponent url=new TextComponent("このURL");
+        ComponentBuilder cb = new ComponentBuilder(
+                "URL").bold(true).color(ChatColor.BLUE)
+                .append("frontserver_url").color(ChatColor.GREEN).bold(false);
+        url.setColor(ChatColor.AQUA);
+        url.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, cb.create()));
+        url.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, frontserver_url + "?setting=" +
+        new String(
+                Base64
+                        .getUrlEncoder()
+                        .withoutPadding()
+                        .encode(
+                                setting_json
+                                        .getBytes(StandardCharsets.US_ASCII)),
+                StandardCharsets.US_ASCII)));
+                url.addExtra(new TextComponent("に接続し感電マシーンの設定を行ってください"));
+        p.spigot().sendMessage(url);
     }
 
     private void event_sender(String player_id, int modifier) {
