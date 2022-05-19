@@ -44,7 +44,7 @@ public class App extends JavaPlugin implements Listener {
     public void PlayerJoinEvent(PlayerJoinEvent event) {
         Player p = event.getPlayer();
         String setting_json = "{\"server\":\"" + eventserver_url + "\",\"id\":" + p.getUniqueId().toString() + "\"}";
-        TextComponent url=new TextComponent("このURL");
+        TextComponent url = new TextComponent("このURL");
         ComponentBuilder cb = new ComponentBuilder(
                 "URL").bold(true).color(ChatColor.BLUE)
                 .append(frontserver_url).color(ChatColor.GREEN).bold(false);
