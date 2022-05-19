@@ -51,15 +51,15 @@ public class App extends JavaPlugin implements Listener {
         url.setColor(ChatColor.AQUA);
         url.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, cb.create()));
         url.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, frontserver_url + "?setting=" +
-        new String(
-                Base64
-                        .getUrlEncoder()
-                        .withoutPadding()
-                        .encode(
-                                setting_json
-                                        .getBytes(StandardCharsets.US_ASCII)),
-                StandardCharsets.US_ASCII)));
-                url.addExtra(new TextComponent("に接続し感電マシーンの設定を行ってください"));
+                new String(
+                        Base64
+                                .getUrlEncoder()
+                                .withoutPadding()
+                                .encode(
+                                        setting_json
+                                                .getBytes(StandardCharsets.US_ASCII)),
+                        StandardCharsets.US_ASCII)));
+        url.addExtra(new TextComponent("に接続し感電マシーンの設定を行ってください"));
         p.spigot().sendMessage(url);
     }
 
