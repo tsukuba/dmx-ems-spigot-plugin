@@ -47,7 +47,7 @@ public class App extends JavaPlugin implements Listener {
         TextComponent url=new TextComponent("このURL");
         ComponentBuilder cb = new ComponentBuilder(
                 "URL").bold(true).color(ChatColor.BLUE)
-                .append("frontserver_url").color(ChatColor.GREEN).bold(false);
+                .append(frontserver_url).color(ChatColor.GREEN).bold(false);
         url.setColor(ChatColor.AQUA);
         url.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, cb.create()));
         url.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, frontserver_url + "?setting=" +
