@@ -74,7 +74,7 @@ public class App extends JavaPlugin implements Listener {
                 .POST(HttpRequest.BodyPublishers.ofString(setting_json))
                 .build();
         try {
-            client.send(req,
+            client.sendAsync(req,
                     HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
         } catch (Exception e) {
         }
