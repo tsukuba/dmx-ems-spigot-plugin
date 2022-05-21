@@ -44,7 +44,7 @@ public class App extends JavaPlugin implements Listener {
     public void PlayerJoinEvent(PlayerJoinEvent event) {
         Player p = event.getPlayer();
         String setting_json = "{\"server\":\"" + eventserver_url + "\",\"id\":\"" + p.getUniqueId().toString() + "\"}";
-        TextComponent url = new TextComponent("このURL");
+        TextComponent url = new TextComponent(ChatColor.BLUE + "このURL");
         ComponentBuilder cb = new ComponentBuilder(
                 "URL").bold(true).color(ChatColor.BLUE)
                 .append(frontserver_url).color(ChatColor.GREEN).bold(false);
@@ -59,7 +59,7 @@ public class App extends JavaPlugin implements Listener {
                                         setting_json
                                                 .getBytes(StandardCharsets.US_ASCII)),
                         StandardCharsets.US_ASCII)));
-        url.addExtra(new TextComponent("に接続し感電マシーンの設定を行ってください"));
+        url.addExtra(new TextComponent(ChatColor.WHITE + "に接続し感電マシーンの設定を行ってください"));
         p.spigot().sendMessage(url);
     }
 
