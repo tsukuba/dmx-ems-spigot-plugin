@@ -64,7 +64,7 @@ public class App extends JavaPlugin implements Listener {
     }
 
     private void event_sender(String player_id, int modifier) {
-        String setting_json = "{\"who\":\"" + player_id + "\",\"modifier\":" + Integer.toString(modifier) + "\"}";
+        String setting_json = "{\"who\":\"" + player_id + "\",\"modifier\":\"" + Integer.toString(modifier) + "\"}";
         HttpClient client = HttpClient.newBuilder().build();
 
         HttpRequest req = HttpRequest.newBuilder()
