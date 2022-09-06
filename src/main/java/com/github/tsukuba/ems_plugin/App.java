@@ -37,7 +37,6 @@ public class App extends JavaPlugin implements Listener {
         FileConfiguration config = getConfig();
         eventserver_url = config.getString("event_server");
         frontserver_url = config.getString("front_server");
-        eventlistenserver_url = config.getString("event_listen_server");
     }
 
     @EventHandler
@@ -68,15 +67,17 @@ public class App extends JavaPlugin implements Listener {
         HttpClient client = HttpClient.newBuilder().build();
 
         HttpRequest req = HttpRequest.newBuilder()
-                .uri(URI.create(
-                        eventlistenserver_url))
+                .uri(URI.create("http://eventserver:3000/"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(setting_json))
                 .build();
         try {
             client.sendAsync(req,
-                    HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+                    HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).thenAccept((ret) -> {
+                        getLogger().info(String.format("Event send status code:%d", ret.statusCode()));
+                    });
         } catch (Exception e) {
+            getLogger().info("Some error occurred in event sending...");
         }
 
     }

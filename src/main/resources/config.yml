@@ -1,3 +1,2 @@
 event_server: 'http://localhost:3001'
 front_server: 'http://localhost/'
-event_listen_server: 'http://localhost:3000/'
