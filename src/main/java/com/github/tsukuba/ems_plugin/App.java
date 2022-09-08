@@ -26,7 +26,6 @@ import java.net.URI;
 public class App extends JavaPlugin implements Listener {
     private String eventserver_url;
     private String frontserver_url;
-    private String eventlistenserver_url;
 
     @Override
     public void onEnable() {
@@ -42,7 +41,7 @@ public class App extends JavaPlugin implements Listener {
     @EventHandler
     public void PlayerJoinEvent(PlayerJoinEvent event) {
         Player p = event.getPlayer();
-        String setting_json = "{\"server\":\"" + eventserver_url + "\",\"id\":\"" + p.getUniqueId().toString() + "\"}";
+        String setting_json = "{\"server\":\"" + eventserver_url + "\",\"id\":\"" + p.getName() + "\"}";
         TextComponent url = new TextComponent(ChatColor.BLUE + "このURL");
         ComponentBuilder cb = new ComponentBuilder(
                 "URL").bold(true).color(ChatColor.BLUE)
@@ -88,9 +87,9 @@ public class App extends JavaPlugin implements Listener {
         if (damaged instanceof Player) {
             getLogger().info(String.format("Player:%s(id:%s)/damage/damage amount:%e",
                     ((Player) damaged).getPlayerListName(),
-                    damaged.getUniqueId().toString(),
+                    damaged.getName().toString(),
                     event.getDamage()));
-            event_sender(damaged.getUniqueId().toString(), (int) event.getDamage());
+            event_sender(damaged.getName(), (int) event.getDamage());
         }
     }
 
@@ -100,10 +99,10 @@ public class App extends JavaPlugin implements Listener {
         if (damaged instanceof Player) {
             getLogger().info(String.format("Player:%s(id:%s)/death/dropped exp:%d/dropped items:%s",
                     ((Player) damaged).getPlayerListName(),
-                    damaged.getUniqueId().toString(),
+                    damaged.getName(),
                     event.getDroppedExp(),
                     event.getDrops().toString()));
-            event_sender(damaged.getUniqueId().toString(), 10);
+            event_sender(damaged.getName(), 10);
         }
     }
 }
